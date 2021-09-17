@@ -38,7 +38,7 @@ def main(mytimer: func.TimerRequest,crisisgroup:func.Out[func.InputStream]) -> N
             if not h3s:
                 break 
 
-            if (len(h3s)==len(times)) and (len(times)==len(desscriptions)):
+            if (len(h3s)==len(times)) and (len(times)==len(descriptions)):
                 pass
             else:
                 print('length error!!!!!! redo this page')
