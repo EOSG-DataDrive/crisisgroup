@@ -25,6 +25,7 @@ def main(mytimer: func.TimerRequest,crisisgroup:func.Out[func.InputStream]) -> N
     for year in list(range(2003,2004)):
         for page in list(range(50)):
             page=str(page)
+            
             link='https://www.crisisgroup.org/crisiswatch/database?page='+page+'&date_range=custom&from_month='+'01'+'&from_year='+str(year)+'&to_month='+'01'+'&to_year='+str(year+1)
             #link = 'https://www.crisisgroup.org/crisiswatch/database?date_range=custom&from_month=01&from_year=2004&to_month=01&to_year=2003'
             headers = {'User-Agent': 'Mozilla/5.0'}
