@@ -22,10 +22,9 @@ def main(mytimer: func.TimerRequest,crisisgroup:func.Out[func.InputStream]) -> N
 
     nextline = []
     temp =''
-    for year in list(range(2003,2004)):
+    for year in list(range(2003,2020)):
         for page in list(range(50)):
             page=str(page)
-            
             link='https://www.crisisgroup.org/crisiswatch/database?page='+page+'&date_range=custom&from_month='+'01'+'&from_year='+str(year)+'&to_month='+'01'+'&to_year='+str(year+1)
             #link = 'https://www.crisisgroup.org/crisiswatch/database?date_range=custom&from_month=01&from_year=2004&to_month=01&to_year=2003'
             headers = {'User-Agent': 'Mozilla/5.0'}
@@ -39,7 +38,7 @@ def main(mytimer: func.TimerRequest,crisisgroup:func.Out[func.InputStream]) -> N
             if not h3s:
                 break 
 
-            if (len(h3s)==len(times)) and (len(times)==len(descriptions)):
+            if (len(h3s)==len(times)) and (len(times)==len(desscriptions)):
                 pass
             else:
                 print('length error!!!!!! redo this page')
@@ -58,48 +57,14 @@ def main(mytimer: func.TimerRequest,crisisgroup:func.Out[func.InputStream]) -> N
             for index,h3 in enumerate(h3s):
                 flaglist = []
                 h3txt = h3.text.strip()
-                '''if h3txt == "Côte d’Ivoire":
-                    temp = "Cote dIvoire"
-                else:
-                    temp = h3txt'''
+
                 datetxt = times[index].text
                 desctxt = descriptions[index].find('p')
                 if desctxt == None:
                     desctxt ='No description'
                 else:
                     desctxt = desctxt.text.strip()
-                    '''aposidx = desctxt.find('’s')
-                    desctxt = desctxt[0:aposidx:]+desctxt[aposidx+1:]
-                    desctxt.replace('é','e')
-                    #spchE = desctxt.find('é')
-                    #desctxt = desctxt[0:aposidx:]+desctxt[aposidx+1:]
-                    desctxt = re.sub('[^a-zA-Z.\d\s\%\$]', '', desctxt)
-                desc_escaped = desctxt.translate(str.maketrans({
-                                                    "–":  r"\-",
-                                                    "]":  r"\]", 
-                                                    "\\": r"\\",
-                                                    "^":  r"\^",
-                                                    "$":  r"\$",
-                                                    "*":  r"\*",
-                                                    ".":  r"\.",
-                                                    "'":  r"\'",
-                                                    "!":  r"\!",
-                                                    "@":  r"\@",
-                                                    "#":  r"\#", 
-                                                    "%":  r"\%",
-                                                    "^":  r"\^",
-                                                    "&":  r"\&",
-                                                    "(":  r"\(",
-                                                    ")":  r"\)",
-                                                    "{":  r"\{",
-                                                    "}":  r"\}",
-                                                    ";":  r"\;",
-                                                    "?":  r"\?",
-                                                    "‘":  r"\‘",
-                                                    "’":  r"\’"
-                                                    }))
 
-                desc_escaped = desc_escaped.replace("\\","") '''
 
                 flags=h3.find_all('span',{"class": "o-icon [ u-mar-r5 ]"})
                 for flag in flags:
@@ -112,13 +77,12 @@ def main(mytimer: func.TimerRequest,crisisgroup:func.Out[func.InputStream]) -> N
 #for i in range(0,len(nextline)):
     #print(nextline[i])
 
-    df = pd.DataFrame(nextline,columns=['Country','Date','Description','Flag'])
-    df['Flag'] = [','.join(map(str, l)) for l in df['Flag']]
+    df = pd.DataFrame(nextline,columns=['Country','Date','Description','Status'])
+    df['Status'] = [','.join(map(str, l)) for l in df['Status']]
     #df.to_csv("C:\\Users\\sanjana\\Desktop\\Crisis Group\\crisisgroupdata.csv",index=False,encoding='utf-8-sig')
 
                     
     dfcsv = df.to_csv(index=False)
-    #dfcsv = df.to_excel(index=False)
-    crisisgroup.set(dfcsv)              
-
+    
+    crisisgroup.set(dfcsv)
     logging.info("completed")
